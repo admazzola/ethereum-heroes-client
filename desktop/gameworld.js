@@ -1,5 +1,5 @@
 
-const IPFS = require('ipfs')
+
 const path = require('path')
 const os = require('os')
 
@@ -40,25 +40,11 @@ const timeout = ms => new Promise(res => setTimeout(res, ms))
 async function initWorld(localTiles)
 {
 
-  const node = new IPFS({
-    repo: path.join(os.tmpdir() + '/' + new Date().toString()),
-        config: {
-            Addresses: {
-                Swarm: [
-                    '/libp2p-webrtc-star/dns4/star-signal.cloud.ipfs.team/wss'
-                ]
-            }
-        }
-    })
-    var running_node = await(node.on('start', () => {}));
-      console.log('waterfalls ')
-var running_node = await(node.on('ready', () => {}));
 
-await timeout(8000) //hacky
-
+  await(loadModels( ));
 
   console.log('waterfallz ')
-    await(loadSampleData(node,localTiles));
+  localTiles = await(  loadSampleData(localTiles));
 
 
     console.log('starting game world ')
@@ -69,25 +55,28 @@ await timeout(8000) //hacky
 }
 
 
-async function loadSampleData(ipfs_node,localTiles)
+async function loadModels( )
+{
+
+    return true ;
+}
+
+
+async function loadSampleData(localTiles)
 {
 
 
 
   //entity_list.push({entity_id:0, geometry:"primitive: box",material:"color:red",position:"-1 0.5 -3", rotation:"0 45 0"})
 
-  localTiles[1] = []
+    localTiles[1] = []
 
-      console.log("load ipfs tile ")
-    //  var sample_tile_data = await (loadIPFSLandTile(ipfs_node,"Qmc5LfkMVAhvzip2u2RjRBRhgVthtSokHsz4Y5bgaBCW2R"));
-    var sample_tile_data = await (loadSampleLandTile(ipfs_node,"Qmc5LfkMVAhvzip2u2RjRBRhgVthtSokHsz4Y5bgaBCW2R"));
-   localTiles[1][2] = sample_tile_data
 
+    var sample_tile_data = {entities: [{entity_id: 1,modelSelector: '#tree',position: "-1 0.5 -3", rotation: "0 45 0"}]}
+    localTiles[1][2] = sample_tile_data
 
 
 
-    console.log("VOLACNO")
-      console.log(sample_tile_data)
 
     return localTiles;
 
@@ -212,8 +201,10 @@ function initSocketServer( localTiles )
   io.on('connection', function(client){
     client.emit('connect', { hello: 'world' });
 
+    client.emit('loadAsset', {id: "tree", src:"/assets/models/tree.gltf"}  );
+
     console.log(localTiles[1][2])
-    client.emit('spawnEntity', localTiles[1][2].tile_data.entities[0]  );
+    client.emit('spawnEntity', localTiles[1][2].entities[0]  );
 
 
     client.on('event', function(data){
