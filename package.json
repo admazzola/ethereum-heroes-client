@@ -1,0 +1,15 @@
+{
+  "name": "ethereum-heroes-client",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:decentraland/web.git"
+  },
+  "author": "admazzola",
+  "homepage": "https://github.com/admazzola/ethereum-heroes-client",
+  "devDependencies": {},
+  "dependencies": {}
+}
